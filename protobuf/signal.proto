@@ -1,5 +1,17 @@
 syntax = "proto3";
 
+// ## rfcat commands
+// freq = 433920000
+// mod = "MOD_ASK_OOK"
+// pktlen = 10
+// syncmode = 0
+// syncbytes = "\xCA\xFE\xAF\xFE"
+// baud = 4800
+// sendbytes = "\xCA\xFE\xAF\xFE"
+// num_preamble = 0
+
+package simplesignal;
+
 enum Modulation {
   MOD_ASK = 0;
   MOD_FSK = 1;
@@ -15,46 +27,24 @@ enum EncodingFormat {
   CODE_DIFF_MANCHESTER = 4;
 }
 
-
-message MessageLabel {
-  string name = 1;
-  int32 start = 2;
-  int32 end = 3;
-  int32 color_index = 4;
-  bool apply_decoding = 5;
-  int32 show = 6;
-  int32 display_format_index = 7;
-  int32 display_bit_order_index = 8;
-  string display_endianness = 9;
-  int32 fuzz_me = 10;
-  int32 fuzz_values = 12;
-  bool auto_created = 13;
-}
-
-
-message MessageType {
-  string name = 1;
-  string id = 2;
-  bool assigned_by_ruleset = 3;
-  bool assigned_by_logic_analyzer = 4;
-  repeated MessageLabel label = 5;
-  int32 ruleset_mode = 6;
-}
-
 message Message {
-  string message_type_id = 1;
-  int32 modulator_index = 2;
-  int32 pause_ms = 3;
-  float timestamp = 4;
-  repeated bool bit_array = 5;
-  int32 bit_array_length = 6;
-  int32 decoding_index = 7;
+  optional int32 beginning_pause_ms = 1; //default 0
+  optional int32 end_pause_ms = 2; //default 0
+  repeated bool bit_array = 3;
+  int32 bit_array_length = 4; //length of bit array
 }
 
 message Signal {
-  string name = 1;
-  float freq = 2;
-  float deviation = 3;
-  Modulation modulation = 4;
-  repeated Message message = 5;
+  
+  required string name = 1; //label your message
+  required float freq = 2;   //frequency for the message
+  float deviation = 3;  //Not sure what that means, it's an option in evilcrow
+  required Modulation modulation = 4; //One of the enums (ASK,FSK,PSK...)  
+  repeated Message message = 5;   //The actual bit array and pauses
+  required EncodingFormat encoding = 6; //the encoding format
+  //Taken from rfcat plugin config (Assuming its a CC1011 config)
+  int32 pktlen = 7;
+  int32 syncmode = 8;
+  int32 baud = 9;
+  
 }
