@@ -22,7 +22,7 @@ This .proto file is used to generate code in the desired language (e.g. python) 
 ### FrequencyUnit: 
 This enumerated type contains values for specifying the unit of frequency. Possible values are: FREQUENCY_UNIT_UNSPECIFIED, FREQUENCY_UNIT_HZ, FREQUENCY_UNIT_KHZ, FREQUENCY_UNIT_MHZ, FREQUENCY_UNIT_GHZ.
 
-###Modulation: 
+### Modulation: 
 This enumerated type contains values for specifying the modulation type. Possible values are: MODULATION_TYPE_UNSPECIFIED, MODULATION_TYPE_ASK, MODULATION_TYPE_FSK, MODULATION_TYPE_PSK.
 
 ### BitrateUnit: 
@@ -74,6 +74,7 @@ A label for the signal. Default is "default_signal"
 The frequency of the signal. Default is 433.92
 #### freq_unit (required, FrequencyUnit) : 
 The unit of the frequency. Can be one of the following:
+
         FREQUENCY_UNIT_UNSPECIFIED
         FREQUENCY_UNIT_HZ
         FREQUENCY_UNIT_KHZ
@@ -83,6 +84,7 @@ The unit of the frequency. Can be one of the following:
 The bitrate of the signal. Default is 600
 #### bitrate_unit (required, BitrateUnit) : 
 The unit of the bitrate. Can be one of the following:
+
         BITRATE_UNIT_UNSPECIFIED
         BITRATE_UNIT_BPS
         BITRATE_UNIT_KBPS
@@ -93,6 +95,7 @@ The deviation of the signal.
 The receiver bandwidth of the signal.
 #### power (optional, PowerSetting) : 
 The power setting of the signal. Can be one of the following:
+
         POWER_SETTING_UNSPECIFIED
         POWER_SETTING_MINUS_30_DBM
         POWER_SETTING_MINUS_20_DBM
