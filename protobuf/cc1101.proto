@@ -1,0 +1,96 @@
+syntax = "proto2";
+package cc11011;
+
+
+enum FrequencyUnit {
+  FREQUENCY_UNIT_UNSPECIFIED = 0;
+  FREQUENCY_UNIT_HZ = 1;
+  FREQUENCY_UNIT_KHZ = 2; 
+  FREQUENCY_UNIT_MHZ = 3;
+  FREQUENCY_UNIT_GHZ = 4;
+}
+
+enum Modulation {
+  MODULATION_TYPE_UNSPECIFIED = 0;
+  MODULATION_TYPE_ASK = 1;
+  MODULATION_TYPE_FSK = 2;
+  MODULATION_TYPE_PSK = 3;
+}
+
+enum BitrateUnit {
+  BITRATE_UNIT_UNSPECIFIED = 0;
+  BITRATE_UNIT_BPS = 1;
+  BITRATE_UNIT_KBPS = 2;
+  BITRATE_UNIT_MBPS = 3;
+}
+
+enum PowerSetting {
+  POWER_SETTING_UNSPECIFIED = 0;
+  POWER_SETTING_MINUS_30_DBM = 1;
+  POWER_SETTING_MINUS_20_DBM = 2;
+  POWER_SETTING_MINUS_15_DBM = 3;
+  POWER_SETTING_MINUS_10_DBM = 4;
+  POWER_SETTING_ZERO_DBM = 5;
+  POWER_SETTING_FIVE_DBM = 6;
+  POWER_SETTING_SEVEN_DBM = 7;
+  POWER_SETTING_TEN_DBM = 8;
+}
+
+
+enum EncodingFormat {
+  ENCODING_FORMAT_UNSPECIFIED = 0;
+  ENCODING_FORMAT_NRZ = 1; 
+  ENCODING_FORMAT_NRZ_INVERT = 2;
+  ENCODING_FORMAT_MANCHESTER_1 = 3; //RADIOLIB_ENCODING_MANCHESTER
+  ENCODING_FORMAT_MANCHESTER_2 = 4;
+  ENCODING_FORMAT_DIFF_MANCHESTER = 5;
+  ENCODING_FORMAT_WHITENING = 6; //RADIOLIB_ENCODING_WHITENING
+}
+
+message Message {
+  optional int32 beginning_pause_ms = 1 [default = 0]; //default 0
+  optional int32 end_pause_ms = 2 [default = 0]; //default 0
+  repeated int32 data = 3;
+  required int32 length = 4 [default = 0]; //length of bit array
+}
+
+message SyncWord {
+  repeated int32 data = 1;
+  required int32 length = 2;
+  optional int32 max_err_bits = 3;
+}
+
+message Node {
+  repeated int32 addresses = 1;
+  required int32 num_broadcast_addrs = 2 [default = 0];
+}
+
+
+message Signal {
+
+  required string name = 1 [default = "default_signal"]; //label your message
+  //CC1101 settings
+  required float freq = 2 [ default = 433.92]; //freq 
+  required FrequencyUnit freq_unit= 3 [ default = FREQUENCY_UNIT_MHZ];
+  required float bitrate = 4 [ default = 600];  //bitrate,baud
+  required BitrateUnit bitrate_unit = 5 [default = BITRATE_UNIT_KBPS];
+  optional float deviation = 6;  //Not sure what that means
+  optional float rx_bw = 7;
+  //default tx 7dBm
+  optional PowerSetting power = 8 [default = POWER_SETTING_SEVEN_DBM]; 
+  
+  //Message settings
+  optional Modulation modulation = 9 [default = MODULATION_TYPE_ASK];  
+  repeated Message messages = 10;   //The data array and pauses
+  //the encoding format
+  optional EncodingFormat encoding = 11 [default = ENCODING_FORMAT_NRZ]; 
+  
+  //Extra optional fields
+  optional bool enable_carrier_sense = 12; //SyncWordFiltering
+  optional bool enable_ook = 13; //OOK enable or disable
+  optional bool enable_crc_filtering = 14; //CRC filtering enable or disable
+  optional int32 data_shaping = 15; //???
+  optional Node node_address = 16; ///Destination info
+  optional string comment = 17; //User field
+
+}
